@@ -2,6 +2,7 @@
 
 from django.db import models
 
+
 PEOPLE_AUTH_CHOICES = (
     (0, '民眾'),
     (1, '義工'),
@@ -61,6 +62,10 @@ class address(models.Model):
     num = models.CharField(verbose_name="號",max_length=255, blank=True)
     f = models.CharField(verbose_name="樓",max_length=255, blank=True)
 
+    def __unicode__(self):
+        return self.city + self.area + self.vil +self.nei+self.rd+self.seg+self.lane+self.aller+self.num+self.f
+#        return "abcde"
+
 class history(models.Model):
     address = models.ForeignKey(address, verbose_name="地址")
     visit_date = models.DateField(verbose_name="拜訪日期",auto_now_add=True)
@@ -72,11 +77,13 @@ class people(models.Model):
     is_del = models.BooleanField(verbose_name="停用")  
     auth = models.IntegerField(verbose_name="權限", choices=PEOPLE_AUTH_CHOICES, default=0)
     state = models.IntegerField(verbose_name="認同狀態",choices=PEOPLE_STATE_CHOICES, default=0)
-    password = models.CharField(verbose_name="密碼",max_length=255)
+    password = models.CharField(verbose_name="密碼",max_length=255, default="123456789")
     name = models.CharField(verbose_name="名字",max_length=255)
+    user_id = models.CharField(verbose_name="身份證字號",max_length=10,blank=True,unique=True)
     sex = models.IntegerField(verbose_name="性別",choices=PEOPLE_SEX_CHOICES, default=0)
     birthday = models.DateField(verbose_name="生日",blank=True)               
-    introducer = models.ForeignKey("self", null=True,verbose_name="介紹人")
+#    introducer = models.ForeignKey("self", null=True,verbose_name="介紹人")
+    introducer = models.IntegerField(verbose_name="介紹人", null=True, default=0)
 # #    introducer_phone        
     tel_office = models.CharField(verbose_name="公司電話",max_length=255, blank=True)
     tel_home = models.CharField(verbose_name="住家電話",max_length=255, blank=True)
@@ -91,3 +98,6 @@ class people(models.Model):
     religion = models.IntegerField(verbose_name="宗教信仰",choices=PEOPLE_RELIGION_CHOICES, default=0)
     is_other_political_party = models.IntegerField(verbose_name="是否參加過其他政黨",choices=PEOPLE_IN_OTHER_PARTY_CHOICES, default=0)
     political_party = models.CharField(verbose_name="政黨名稱",max_length=255, blank=True)
+
+
+	

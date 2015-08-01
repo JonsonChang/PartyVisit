@@ -1,0 +1,32 @@
+{% load staticfiles %}
+{% static 'aaa.txt' %}
+
+<form action="/your-name/" method="post">
+    {% csrf_token %}
+    {{ form.as_table }}
+    <input type="submit" value="Submit" />
+</form>
+<hr />
+<form action="/your-name/" method="post">
+    {% csrf_token %}
+    {{ form.as_ul }}
+    <input type="submit" value="Submit" />
+</form>
+<hr />
+<form action="/your-name/" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit" />
+</form>
+<hr />
+<form action="/your-name/" method="post">
+    {% csrf_token %}
+    {{ people_form.as_p }}
+    <input type="submit" value="Submit" />
+</form>
+<hr />
+<form action="/your-name/" method="post">
+    {% csrf_token %}
+    {{ history_form.as_p }}
+    <input type="submit" value="Submit" />
+</form>
