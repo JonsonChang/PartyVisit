@@ -51,11 +51,11 @@ PEOPLE_IN_OTHER_PARTY_CHOICES = (
 
 class address(models.Model):
     store = models.CharField(verbose_name="店家名", max_length=255, blank=True)
-    city = models.CharField(verbose_name="縣", max_length=255)
+    city = models.CharField(verbose_name="縣/市", max_length=255)
     area = models.CharField(verbose_name="區",max_length=255)
-    vil = models.CharField(verbose_name="里", max_length=255, blank=True)
+    vil = models.CharField(verbose_name="里/村", max_length=255, blank=True)
     nei = models.CharField(verbose_name="鄰",max_length=255, blank=True)
-    rd = models.CharField(verbose_name="路",max_length=255, blank=True)
+    rd = models.CharField(verbose_name="路/街",max_length=255, blank=True)
     seg = models.CharField(verbose_name="段",max_length=255, blank=True)
     lane = models.CharField(verbose_name="巷",max_length=255, blank=True)
     aller = models.CharField(verbose_name="弄",max_length=255, blank=True)
@@ -63,7 +63,8 @@ class address(models.Model):
     f = models.CharField(verbose_name="樓",max_length=255, blank=True)
 
     def __unicode__(self):
-        return self.city + self.area + self.vil +self.nei+self.rd+self.seg+self.lane+self.aller+self.num+self.f
+        return self.city + self.area + self.vil +self.nei +"鄰".decode('utf-8')+self.rd+self.seg+"段".decode('utf-8')+self.lane+"巷".decode('utf-8')+self.aller+"弄".decode('utf-8')+self.num+"號".decode('utf-8')+self.f+"樓".decode('utf-8')
+#        return self.city + self.area + self.vil +self.nei+"鄰".decode('utf-8') +self.rd+self.seg+self.lane+self.aller+self.num+self.f
 #        return "abcde"
 
 class history(models.Model):
@@ -74,11 +75,11 @@ class history(models.Model):
 class people(models.Model):
 # todo    auth_id    權限設定  
     address = models.ForeignKey(address, verbose_name="地址")
-    is_del = models.BooleanField(verbose_name="停用")  
+    is_del = models.BooleanField(verbose_name="停用", default=False)  
     auth = models.IntegerField(verbose_name="權限", choices=PEOPLE_AUTH_CHOICES, default=0)
     state = models.IntegerField(verbose_name="認同狀態",choices=PEOPLE_STATE_CHOICES, default=0)
     password = models.CharField(verbose_name="密碼",max_length=255, default="123456789")
-    name = models.CharField(verbose_name="名字",max_length=255)
+    name = models.CharField(verbose_name="名字",max_length=255, blank=False, null = False)
     user_id = models.CharField(verbose_name="身份證字號",max_length=10,blank=True,unique=True)
     sex = models.IntegerField(verbose_name="性別",choices=PEOPLE_SEX_CHOICES, default=0)
     birthday = models.DateField(verbose_name="生日",blank=True)               
@@ -98,6 +99,8 @@ class people(models.Model):
     religion = models.IntegerField(verbose_name="宗教信仰",choices=PEOPLE_RELIGION_CHOICES, default=0)
     is_other_political_party = models.IntegerField(verbose_name="是否參加過其他政黨",choices=PEOPLE_IN_OTHER_PARTY_CHOICES, default=0)
     political_party = models.CharField(verbose_name="政黨名稱",max_length=255, blank=True)
+    def __unicode__(self):
+        return self.name
 
 
 	
