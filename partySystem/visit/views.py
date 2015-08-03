@@ -1,8 +1,11 @@
 # coding=UTF-8
 import time
 import datetime
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
+from django.views import generic
 
 from .forms import *
 from .models import address, history, people
@@ -13,29 +16,46 @@ def index(request):
 #    latest_question_list = Question.objects.order_by('-pub_date')[:5]
     context = {'latest_question_list': "list"}
     return render(request, 'base.html', context)
-    
 
-def myVill(request):
+
+class myVillView(generic.list.ListView):
+    paginate_by = 6
+    template_name = 'page_my_village.html'
+    context_object_name = 'addr_list'
+     
+    def get_queryset(self):
+        return address.objects.all()
+    
+    def get_context_data(self, **kwargs):
+        context = super(myVillView, self).get_context_data(**kwargs)
+#         print context
+        return context    
+        
+class DetailView(generic.DetailView):
+    model = people
+    template_name = 'page_my_village.html'
+    
+# def myVill_bak(request):
 #    latest_question_list = Question.objects.order_by('-pub_date')[:5]
-    context = {'latest_question_list': "list"}
-    return render(request, 'page_my_village.html', context)
+#    context = {'latest_question_list': "list"}
+#    return render(request, 'page_my_village.html', context)
 
 def test_gen_db(request):
     people.objects.all().delete()
     history.objects.all().delete()
     address.objects.all().delete()
-    for x in range(1,500):
-        a = address(city="桃園市", area="桃園區", vil="大明里", nei="3", rd="三民路", seg= "三", lane="5", aller="6", num=x, f="4");
+    for x in range(1, 500):
+        a = address(city="桃園市", area="桃園區", vil="大明里", nei="3", rd="三民路", seg="三", lane="5", aller="6", num=x, f="4", store="好店");
         a.save()
-    a = address(city="桃園市", area="桃園區", vil="大明里", nei="3", rd="三民路", seg= "一", lane="5", aller="63", num="3", f="44");
+    a = address(city="桃園市", area="桃園區", vil="大明里", nei="3", rd="三民路", seg="一", lane="5", aller="63", num="3", f="44");
     a.save()
     a = address(city="桃園市", area="中壢區", vil="小明里", nei="3", rd="青田街", num="3", f="44");
     a.save()
-    a = address(city="桃園市", area="中壢區", vil="龍一里", nei="33", rd="中正路",lane="5",  num="3", f="43");
+    a = address(city="桃園市", area="中壢區", vil="龍一里", nei="33", rd="中正路", lane="5", num="3", f="43");
     a.save()
-    a = address(city="桃園市", area="中壢區", vil="龍二里", nei="32", rd="中山路", seg= "三", aller="26", num="32", f="24");
+    a = address(city="桃園市", area="中壢區", vil="龍二里", nei="32", rd="中山路", seg="三", aller="26", num="32", f="24");
     a.save()
-    a = address(city="桃園市", area="桃園區", vil="三石里", nei="3", rd="三民路", seg= "三", lane="5", aller="6", num="3", f="34");
+    a = address(city="桃園市", area="桃園區", vil="三石里", nei="3", rd="三民路", seg="三", lane="5", aller="6", num="3", f="34");
     a.save()
     a.history_set.create(record='很感興趣，下次再拜訪')
     d = datetime.datetime.strptime('2010-11-16 20:10:58', '%Y-%m-%d %H:%M:%S')
@@ -44,7 +64,7 @@ def test_gen_db(request):
     
     
     
-def get_name(request): #
+def get_name(request):  #
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         form = NameForm(request.POST)

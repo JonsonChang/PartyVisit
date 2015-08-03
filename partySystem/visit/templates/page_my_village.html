@@ -1,5 +1,5 @@
-{% extends 'base.html' %}
-{% block container %}
+{% extends 'base.html' %} {% block container %}
+
 <div id="query_div" class="bg-info placeholder">
 	<!-- 搜尋 div -->
 	<div class="row">
@@ -38,99 +38,42 @@
 				</tr>
 			</thead>
 			<tbody>
+				{% for addr in addr_list %}
 				<tr>
 					<td><INPUT TYPE="checkbox"></td>
 					<td>2</td>
 					<td>燈號</td>
 					<td>姓名/姓名</td>
-					<td>桃園市中壢區大大里55鄰中正一路四段45巷34弄2345號4444樓</td>
-					<td>店家名</td>
+					<td>{{ addr }}</td>
+					<td>{{ addr.store}}</td>
 					<td><button class="btn btn-success btn-sm" type="button">
 							<span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 修改
 						</button></td>
 				</tr>
-				<tr>
-					<td><INPUT TYPE="checkbox"></td>
-					<td>2</td>
-					<td>燈號</td>
-					<td>姓名/姓名</td>
-					<td>桃園市中壢區大大里55鄰中正一路四段45巷34弄2345號4444樓</td>
-					<td>店家名</td>
-					<td><button class="btn btn-success btn-sm" type="button">
-							<span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 修改
-						</button></td>
-				</tr>
-				<tr>
-					<td><INPUT TYPE="checkbox"></td>
-					<td>2</td>
-					<td>燈號</td>
-					<td>姓名/姓名</td>
-					<td>桃園市中壢區大大里55鄰中正一路四段45巷34弄2345號4444樓</td>
-					<td>店家名</td>
-					<td><button class="btn btn-success btn-sm" type="button">
-							<span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 修改
-						</button></td>
-				</tr>
-				<tr>
-					<td><INPUT TYPE="checkbox"></td>
-					<td>2</td>
-					<td>燈號</td>
-					<td>姓名/姓名</td>
-					<td>桃園市中壢區大大里55鄰中正一路四段45巷34弄2345號4444樓</td>
-					<td>店家名</td>
-					<td><button class="btn btn-success btn-sm" type="button">
-							<span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 修改
-						</button></td>
-				</tr>
-				<tr>
-					<td><INPUT TYPE="checkbox"></td>
-					<td>2</td>
-					<td>燈號</td>
-					<td>姓名/姓名</td>
-					<td>桃園市中壢區大大里55鄰中正一路四段45巷34弄2345號4444樓</td>
-					<td>店家名</td>
-					<td><button class="btn btn-success btn-sm" type="button">
-							<span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 修改
-						</button></td>
-				</tr>
-				<tr>
-					<td><INPUT TYPE="checkbox"></td>
-					<td>2</td>
-					<td>燈號</td>
-					<td>姓名/姓名</td>
-					<td>桃園市中壢區大大里55鄰中正一路四段45巷34弄2345號4444樓</td>
-					<td>店家名</td>
-					<td><button class="btn btn-success btn-sm" type="button">
-							<span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 修改
-						</button></td>
-				</tr>
-				<tr>
-					<td><INPUT TYPE="checkbox"></td>
-					<td>2</td>
-					<td>燈號</td>
-					<td>姓名/姓名</td>
-					<td>桃園市中壢區大大里55鄰中正一路四段45巷34弄2345號4444樓</td>
-					<td>店家名</td>
-					<td><button class="btn btn-success btn-sm" type="button">
-							<span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 修改
-						</button></td>
-				</tr>
-				<tr>
-					<td><INPUT TYPE="checkbox"></td>
-					<td>2</td>
-					<td>燈號</td>
-					<td>姓名/姓名</td>
-					<td>桃園市中壢區大大里55鄰中正一路四段45巷34弄2345號4444樓</td>
-					<td>店家名</td>
-					<td><button class="btn btn-success btn-sm" type="button">
-							<span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 修改
-						</button></td>
-				</tr>
-				
+				{% endfor %}
 			</tbody>
 
 		</table>
-		<hr />
+		<nav>
+			<ul class="pagination">
+				{% if page_obj.has_previous %}
+				<li><a href="/visit/myVill/{{ page_obj.previous_page_number }}/" aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+				</a></li> {% endif %}
+				<!-- 
+				<li><a href="#">1</a></li>
+				<li><a href="#">2</a></li>
+				 -->
+				<li><a href="#">{{ page_obj.number }}</a></li>
+				<!--
+				<li><a href="#">4</a></li>
+				<li><a href="#">5</a></li>
+				-->
+				{% if page_obj.has_next %}
+				<li><a href="/visit/myVill/{{ page_obj.next_page_number }}/" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+				{% endif %}
+				</a></li>
+			</ul>
+		</nav> 共{{ page_obj.paginator.num_pages }}頁
 		<button class="btn btn-primary " type="button">
 			<span class="glyphicon glyphicon-open" aria-hidden="true"></span> 匯出
 		</button>
