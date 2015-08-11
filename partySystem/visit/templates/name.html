@@ -1,7 +1,7 @@
 {% load staticfiles %}
 {% static 'aaa.txt' %}
 
-<form action="/your-name/" method="post">
+<form action="/visit/get_name/" method="post">
     {% csrf_token %}
     {{ form.as_table }}
     <input type="submit" value="Submit" />

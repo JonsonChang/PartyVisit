@@ -1,46 +1,62 @@
-var g_SEX_code = {
-	"0" : "女",
-	"1" : "男"
-}
-var g_YN_code = {
-		"0" : "否",
-		"1" : "是"
-}
+//var g_SEX_code = {
+//	"0" : "女",
+//	"1" : "男"
+//}
+//var g_YN_code = {
+//		"0" : "否",
+//		"1" : "是"
+//}
+//
+//var g_EDU_code = {
+//	"7" : "博士",
+//	"6" : "碩士",
+//	"5" : "學士",
+//	"4" : "專科",
+//	"3" : "高中/職",
+//	"2" : "國中",
+//	"1" : "國小"
+//}
+//
+//var g_isEDU_code = {
+//	"0" : "畢業",
+//	"1" : "就讀"
+//}
+//
+//var g_RELIGION_code = {
+//	"1" : "佛教",
+//	"2" : "回教",
+//	"3" : "道教",
+//	"4" : "天主教",
+//	"5" : "基督教",
+//	"6" : "一貫道",
+//	"7" : "無",
+//	"8" : "其他"
+//}
+//
+//var g_PERSON_status = {
+//	"0" : "無狀態",
+//	"1" : "拒決",
+//	"2" : "認同",
+//	"9" : "已入黨"
+//}
+//
 
-var g_EDU_code = {
-	"7" : "博士",
-	"6" : "碩士",
-	"5" : "學士",
-	"4" : "專科",
-	"3" : "高中/職",
-	"2" : "國中",
-	"1" : "國小"
-}
-
-var g_isEDU_code = {
-	"0" : "畢業",
-	"1" : "就讀"
-}
-
-var g_RELIGION_code = {
-	"1" : "佛教",
-	"2" : "回教",
-	"3" : "道教",
-	"4" : "天主教",
-	"5" : "基督教",
-	"6" : "一貫道",
-	"7" : "無",
-	"8" : "其他"
-}
-
-var g_PERSON_status = {
-	"0" : "無狀態",
-	"1" : "拒決",
-	"2" : "認同",
-	"9" : "已入黨"
-}
-
-
+//function getCookie(name) {
+//	var cookieValue = null;
+//	if (document.cookie && document.cookie != '') {
+//		var cookies = document.cookie.split(';');
+//		for (var i = 0; i < cookies.length; i++) {
+//			var cookie = jQuery.trim(cookies[i]);
+//			// Does this cookie string begin with the name we want?
+//			if (cookie.substring(0, name.length + 1) == (name + '=')) {
+//				cookieValue = decodeURIComponent(cookie
+//						.substring(name.length + 1));
+//				break;
+//			}
+//		}
+//	}
+//	return cookieValue;
+//}
 
 function load_page(content, url, fn) {
 	$.get(url, function(data) {
@@ -161,14 +177,3 @@ function nl2br (str, is_xhtml) {
     return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ breakTag +'$2');
 }
 
-function faqcode2str(code) {
-	if (is_null(code) == true) {
-		return "";
-	}
-	
-	var ret = eval("g_FAQ_code." + code);
-	if(is_null(ret)==false)
-		return ret;
-	else
-		return "";
-}

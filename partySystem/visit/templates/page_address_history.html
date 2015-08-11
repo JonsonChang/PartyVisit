@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block more_script %}
+<script>
+
+function btn_add_record_click(){
+	
+	$.ajaxSetup({
+		data:{csrfmiddlewaretoken:'{{csrf_token}}'},
+	});	
+	
+	console.log("btn_add_record click");
+	var record = $("#record").val();
+	console.log(record);
+	url = "/visit/history_add/";
+	data = "csrfmiddlewaretoken={{csrf_token}}&address=" + {{address.id}} + "&record=" + record;
+	$.post(url,data,function(){
+		console.log("add record ok");
+	});
+}
+
+function btn_add_people_click(){
+	console.log("btn_add_people click");
+}
+
+
+$(function(){
+	$("#btn_add_record").click(btn_add_record_click);
+	$("#btn_add_people").click(btn_add_people_click);
+});
+
+</script>
+
+{% endblock more_script %}
+ 
+{% block container %}
+
+{% for history in history_list %}
+    <li>{{ history.address }}</li>
+    <li>{{ history.visit_date }}</li>
+    <li>{{ history.record }}</li>
+    <hr />
+{% endfor %}
+
+<form>
+<input type="hidden" name="address" value="{{ address.id }}">
+ 	{% csrf_token %}
+	新增記錄: <input id="record" type="text" name="record">
+	<button class="btn btn-success btn-sm" type="button" id="btn_add_record">
+		<span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 新增記錄
+	</button>
+</form>
+<hr>
+{% for people in people_list %}
+    <li>{{ people }} {{ people.get_state_display }} 介紹人：{{ people.introducer }} <a href="#">修改</a></li>
+    <hr />
+{% endfor %}
+
+	<button class="btn btn-success btn-sm" type="button" id="btn_add_people">
+		<span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 新增人員
+	</button>
+
+{% endblock container %}

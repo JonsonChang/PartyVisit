@@ -1,7 +1,7 @@
 $(function(){
-	console.log("main");
-	init_menu();
-	$("#menu_my_village").click();
+//	console.log("main");
+//	init_menu();
+//	$("#menu_my_village").click();
 });
 
 
