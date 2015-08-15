@@ -18,9 +18,7 @@ from .models import address, history, people
 
 
 def json_response(result, msg="", data={}):
-#     return HttpResponse("ok")
-#     return HttpResponse(json.dumps({"result": result, "msg": msg, "data": data}), mimetype='application/json')
-    return HttpResponse(json.dumps({"result": result, "msg": msg, "data": data}))
+    return HttpResponse(json.dumps({"result": result, "msg": msg, "data": data}), content_type="application/json")
 
 
 # Create your views here.
@@ -40,8 +38,12 @@ class myVillView(generic.list.ListView):
     
     def get_context_data(self, **kwargs):
         context = super(myVillView, self).get_context_data(**kwargs)
-#         print context
+        for addr in context["object_list"]:
+            addr.peoples = addr.people_set.all()
+        print context
         return context
+    
+
 
         
 class address_UpdateView(UpdateView):
@@ -69,27 +71,39 @@ class address_DetailView(generic.DetailView):
         context['form'] = addressForm(context['address']) 
         return context
 
-		
 def address_History(request, addr_id = 0):
     a = address.objects.get(pk=addr_id)
     h = a.history_set.all().order_by('visit_date') 
     p = a.people_set.all()
+    form = peopleForm()
     return render(request, 'page_address_history.html', 
                   {'history_list': h, 
                    'people_list':p,
-                   'address':a})
+                   'address':a, 
+                   'people_form':form})
 
-        
+def people_modify_form(request, people_id):
+    p = people.objects.get(pk = people_id)
+    f = peopleForm(instance=p)
+    return HttpResponse(f.as_p())
+    
 def people_update(request):
-    if request.method == 'POST': # 更新資料 
-        form = peopleForm(request.POST)
-#         print request.POST
-        if form.is_valid():
+    if request.method == 'POST':  # 更新資料
+        postdata = request.POST 
+        p = people.objects.get(pk=postdata["people_id"])
+        f = peopleForm(postdata, instance=p)
+        
+        if f.is_valid():
+            f.save()
+            print "ok"
             return HttpResponseRedirect('/thanks/')
-    else: #新增資料
-        form = peopleForm()
+        else:
+            print f.errors
+            print "error"
+    else:  # 新增資料
+        print "error"
 
-    return render(request, 'name.html', {'form': form, 'people_form': peopleForm, 'history_form': historyForm})    
+    return render(request, 'name.html')    
 
 def history_add(request):
     result = True
@@ -105,20 +119,22 @@ def history_add(request):
         else:
             result = False
             return json_response(result, msg=u'失敗', data={})
-		
-def get_name(request):  #
-    # if this is a POST request we need to process the form data
-    if request.method == 'POST':
-        form = NameForm(request.POST)
-        print request.POST
+
+def people_add(request):
+    if request.method == 'POST': # 新增 / 更新資料 
+        postdata = request.POST
+        print postdata["address"]
+        a = address.objects.get(pk=postdata["address"])
+        form = peopleForm(request.POST,instance=people(address =a, auth=0, password="123456789",is_del=False))
         if form.is_valid():
-            return HttpResponseRedirect('/thanks/')
+            form.save()
+            return json_response(result=True, msg=u'成功', data={})
+        else:
+            print form.errors
+            return json_response(result=False, msg=u'失敗', data={})
 
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        form = addressForm()
-
-    return render(request, 'name.html', {'form': form, 'people_form': peopleForm, 'history_form': historyForm})    
+    return json_response(result=False, msg=u'失敗', data={})
+        
 
 def test_gen_db(request):
     people.objects.all().delete()
@@ -153,8 +169,6 @@ def test_gen_db(request):
         a.save()
     
     return render(request, 'page_my_village.html')
-    
-    
     
     
 def detail(request, question_id):

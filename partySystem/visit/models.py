@@ -82,9 +82,9 @@ class people(models.Model):
     name = models.CharField(verbose_name="名字",max_length=255, blank=False, null = False)
     user_id = models.CharField(verbose_name="身份證字號",max_length=10,blank=True,unique=True)
     sex = models.IntegerField(verbose_name="性別",choices=PEOPLE_SEX_CHOICES, default=0)
-    birthday = models.DateField(verbose_name="生日",blank=True)               
+    birthday = models.DateField(verbose_name="生日",blank=True, null = True)               
 #    introducer = models.ForeignKey("self", null=True,verbose_name="介紹人")
-    introducer = models.CharField(verbose_name="介紹人", max_length=255, blank=False, default="")
+    introducer = models.CharField(verbose_name="介紹人", max_length=255, blank=True, default="")
 # #    introducer_phone        
     tel_office = models.CharField(verbose_name="公司電話",max_length=255, blank=True)
     tel_home = models.CharField(verbose_name="住家電話",max_length=255, blank=True)

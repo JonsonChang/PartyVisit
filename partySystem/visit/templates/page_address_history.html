@@ -4,7 +4,6 @@
 <script>
 
 function btn_add_record_click(){
-	
 	$.ajaxSetup({
 		data:{csrfmiddlewaretoken:'{{csrf_token}}'},
 	});	
@@ -14,13 +13,29 @@ function btn_add_record_click(){
 	console.log(record);
 	url = "/visit/history_add/";
 	data = "csrfmiddlewaretoken={{csrf_token}}&address=" + {{address.id}} + "&record=" + record;
-	$.post(url,data,function(){
-		console.log("add record ok");
+	$.post(url,data,function(data){
+		console.log(data);
+        location.reload();
 	});
 }
 
 function btn_add_people_click(){
 	console.log("btn_add_people click");
+    $('#Modal_add_people').modal({ backdrop: 'static'});
+}
+
+function btn_modify_people(people_id){
+	console.log(people_id);
+	$("#people_id").val(people_id);
+	url = "/visit/people_form/" + people_id + "/"; 	
+	$.get(url, function(data){
+		$("#div_modify_people").html(data);
+		$('#Modal_modify_people').modal({ backdrop: 'static'});
+	}); 
+	
+	
+	
+	
 }
 
 
@@ -34,13 +49,12 @@ $(function(){
 {% endblock more_script %}
  
 {% block container %}
-
+{{ address }}
+<hr />
 {% for history in history_list %}
-    <li>{{ history.address }}</li>
-    <li>{{ history.visit_date }}</li>
-    <li>{{ history.record }}</li>
-    <hr />
+    <p> {{ history.visit_date }}&nbsp;&nbsp;&nbsp; {{ history.record }}</p>
 {% endfor %}
+<hr />
 
 <form>
 <input type="hidden" name="address" value="{{ address.id }}">
@@ -52,12 +66,65 @@ $(function(){
 </form>
 <hr>
 {% for people in people_list %}
-    <li>{{ people }} {{ people.get_state_display }} 介紹人：{{ people.introducer }} <a href="#">修改</a></li>
+    <li>{{ people }} {{ people.get_state_display }} 介紹人：{{ people.introducer }} 
+    <button class="btn " type="button" onclick='btn_modify_people("{{ people.id }}")'>修改</button>
+    </li>
     <hr />
 {% endfor %}
 
 	<button class="btn btn-success btn-sm" type="button" id="btn_add_people">
 		<span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 新增人員
 	</button>
+    
+    
+<!-- 對話框 -->    
+<div class="modal fade" id="Modal_add_people" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">新增人員</h4>
+      </div>
+			<form action="/visit/people_add/" method="post">
+				<div class="modal-body">
+					{% csrf_token %}
+					<input type="hidden" name="address" value="{{ address.id }}">
+					<p><label>地址:</label> {{address}}</p>
+					{{ people_form.as_p }}
+				</div>
+				<div class="modal-footer">
+				<button type="submit">submit</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+					<button type="button" class="btn btn-primary">儲存</button>
+				</div>
+			</form>
+		</div>
+  </div>
+</div>    
 
+<div class="modal fade" id="Modal_modify_people" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">修改人員資料</h4>
+      </div>
+			<form action="/visit/people_update/" method="post">
+				<div class="modal-body">
+					{% csrf_token %}
+					<input type="hidden" name="address" value="{{ address.id }}">
+					<input type="hidden" id="people_id" name="people_id" value="">
+					<p><label>地址:</label> {{address}}</p>
+					<div id="div_modify_people"></div>
+				</div>
+				<div class="modal-footer">
+				<button type="submit">submit</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+					<button type="button" class="btn btn-primary">儲存</button>
+				</div>
+			</form>
+		</div>
+  </div>
+</div>
+    
 {% endblock container %}

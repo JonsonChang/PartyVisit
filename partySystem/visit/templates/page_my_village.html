@@ -43,12 +43,17 @@
 					<td><INPUT TYPE="checkbox"></td>
 					<td>2</td>
 					<td>燈號</td>
-					<td>姓名/姓名</td>
+					<td>{% if addr.peoples %}
+						<ol>
+						{% for people in addr.peoples %}
+						<li>{{ people }}</li>
+						{% endfor %}
+						</ol>
+					{% endif %}</td>
 					<td>{{ addr }}</td>
 					<td>{{ addr.store}}</td>
-					<td><a href="/visit/address_History/{{addr.id}}/">modify</a><button class="btn btn-success btn-sm" type="button">
-							<span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 修改
-						</button></td>
+					<td><a href="/visit/address_History/{{addr.id}}/" class="btn btn-success btn-sm" ><span class="glyphicon glyphicon-cog" aria-hidden="true"></span>修改</a>
+						</td>
 				</tr>
 				{% endfor %}
 			</tbody>

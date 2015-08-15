@@ -5,14 +5,12 @@ from django.forms import ModelForm
 
 from .models import *
 
-class NameForm(forms.Form):
-    your_namea = forms.CharField(label='名稱', max_length=100)
-
 #=================================	
 class addressForm(ModelForm):
     class Meta:
         model = address
         fields = '__all__'
+#        fields = ['pub_date', 'headline', 'content', 'reporter']
 	
 class historyForm(ModelForm):
     class Meta:
@@ -22,4 +20,5 @@ class historyForm(ModelForm):
 class peopleForm(ModelForm):
     class Meta:
         model = people
-        fields = '__all__'		
+        fields = '__all__'	
+        exclude = ['is_del', 'auth', 'password', 'address']
